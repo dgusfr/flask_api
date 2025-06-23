@@ -1,19 +1,13 @@
 FROM python:3.10
 
-# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copie o arquivo de dependências para o diretório de trabalho
 COPY requirements.txt requirements.txt
 
-# Instale as dependências
 RUN pip install -r requirements.txt
 
-# Copie o código da sua aplicação para o diretório de trabalho
 COPY . .
 
-# Exponha a porta em que o aplicativo será executado
 EXPOSE 5000
 
-# Defina o comando para executar a sua aplicação
 CMD ["flask", "run", "--host=0.0.0.0"]
