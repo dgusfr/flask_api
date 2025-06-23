@@ -25,3 +25,5 @@ def create_store():
         "name": request_data["name"],
         "items": [],
     }
+    store.append(new_store)
+    return {"store": new_store}, 201
