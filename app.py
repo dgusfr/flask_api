@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -16,3 +16,7 @@ store = [
 @app.get("/store")
 def get_stores():
     return {"stores": store}
+
+@app.post("/store")
+def create_store():
+    
