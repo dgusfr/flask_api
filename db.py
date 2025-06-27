@@ -9,5 +9,3 @@ items = {
         "price": 9.99,
     },
 }
-
-items[1]
