@@ -32,6 +32,13 @@ def create_item(name):
     item = {**item_data, "id": item_id}
     items[item_id] = item
 
+    return item, 201
+
+
+@app.get("/item")
+def get_all_items():
+    return {"items": list(items.values())}
+
 
 @app.get("/store/<string: store_id>")
 def get_store(store_id):
@@ -41,9 +48,9 @@ def get_store(store_id):
         return {"message": "Store not found"}, 404
 
 
-@app.get("/store/<string:name>/item")
-def get_items_in_store(name):
-    for s in store:
-        if s["name"] == name:
-            return {"store": s["items"]}
-    return {"message": "Store not found"}, 404
+@app.get("/item/<string:item_id>")
+def get_items(item_id):
+    try:
+        return items["item_id"]
+    except KeyError:
+        return {"message": "Store not found"}, 404
