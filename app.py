@@ -1,19 +1,21 @@
 from flask import Flask, request
 from db import items, stores
+import uuid
 
 app = Flask(__name__)
 
 
 @app.get("/store")
 def get_stores():
-    return {"stores": store}
+    return {"stores": list(stores.values())}
 
 
 @app.post("/store")
 def create_store():
-    request_data = request.get_json()
+    store_data = request.get_json()
+    store_id = uuid.uuid4().hex
     new_store = {
-        "name": request_data["name"],
+        "name": store_data["name"],
         "items": [],
     }
     store.append(new_store)
