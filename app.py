@@ -15,25 +15,22 @@ def create_store():
     try:
         store_data = request.get_json()
         store_id = uuid.uuid4().hex
-        new_store = {**store_data, "id": store_id}
-        stores.append(new_store)
-        return {"store": new_store}, 201
+        store = {**store_data, "id": store_id}
+        stores.stores[store_id] = store
+        return {"store": store}, 201
     except KeyError:
         return {"message": "Invalid store data"}, 400
 
 
-@app.post("/store/<string:name>/item")
+@app.post("/item")
 def create_item(name):
-    request_data = request.get_json()
-    for s in store:
-        if s["name"] == name:
-            new_item = {
-                "name": request_data["name"],
-                "price": request_data["price"],
-            }
-            s["items"].append(new_item)
-            return {"item": new_item}, 201
-    return {"message": "Store not found"}, 404
+    item_data = request.get_json()
+    if item_data["store_id"] not in stores:
+        return {"message": "Store not found"}, 404
+
+    item_id = uuid.uuid4().hex
+    item = {**item_data, "id": item_id}
+    items[item_id] = item
 
 
 @app.get("/store/<string: store_id>")
