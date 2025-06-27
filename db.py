@@ -1,4 +1,4 @@
-store = {}
+stores = {}
 items = {
     1: {
         "name": "My Item",
