@@ -12,14 +12,14 @@ def get_stores():
 
 @app.post("/store")
 def create_store():
-    store_data = request.get_json()
-    store_id = uuid.uuid4().hex
-    new_store = {
-        "name": store_data["name"],
-        "items": [],
-    }
-    store.append(new_store)
-    return {"store": new_store}, 201
+    try:
+        store_data = request.get_json()
+        store_id = uuid.uuid4().hex
+        new_store = {**store_data, "id": store_id}
+        stores.append(new_store)
+        return {"store": new_store}, 201
+    except KeyError:
+        return {"message": "Invalid store data"}, 400
 
 
 @app.post("/store/<string:name>/item")
