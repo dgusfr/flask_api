@@ -11,7 +11,8 @@ blp = Blueprint("Stores", "stores", description="Operations on stores")
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
-    def get(self, store_id):
+    @blp.response(200, StoreSchema)
+    def get(cls, store_id):
         try:
             return stores[store_id]
         except KeyError:
@@ -27,11 +28,13 @@ class Store(MethodView):
 
 @blp.route("/store")
 class StoreList(MethodView):
-    def get(self):
-        return {"stores": list(stores.values())}
+    @blp.response(200, StoreSchema(many=True))
+    def get(cls):
+        return stores.values()
 
     @blp.arguments(StoreSchema)
-    def post(self, store_data):
+    @blp.response(201, StoreSchema)
+    def post(cls, store_data):
         for store in stores.values():
             if store_data["name"] == store["name"]:
                 abort(400, message=f"Store already exists.")
