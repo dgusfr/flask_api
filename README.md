@@ -6,3 +6,7 @@ pip install -r requirements.txt
 
 docker build -t flask-api .
 docker run -dp 5005:5000 -w /app -v "$(pwd):/app" flask-api
+
+---
+
+![alt text](images/image.png)
