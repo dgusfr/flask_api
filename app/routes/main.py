@@ -8,11 +8,31 @@ def home():
     return jsonify({"message": "Welcome to the Flask API!"})
 
 
+# Listagem de produtos
 @main_bp.route("/products", methods=["GET"])
 def products():
     return jsonify({"message": "List of Products"})
 
 
+# Login de usuario
 @main_bp.route("/login", methods=["POST"])
 def login():
     return jsonify({"message": "LOGIN"})
+
+
+# Criação de produto
+@main_bp.route("/products", methods=["POST"])
+def create_products():
+    return jsonify({"message": "Add a new product"})
+
+
+# Visualisação de produto
+@main_bp.route("/products/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    return jsonify({"message": f"Details of product {product_id}"})
+
+
+# Atualçização de produto
+@main_bp.route("/products/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    return jsonify({"message": f"Details of product {product_id}"})
