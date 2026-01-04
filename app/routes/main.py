@@ -33,6 +33,6 @@ def get_product(product_id):
 
 
 # Atualização de produto
-@main_bp.route("/products/<int:product_id>", methods=["GET"])
+@main_bp.route("/products/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
-    return jsonify({"message": f"Details of product {product_id}"})
+    return jsonify({"message": f"Update product {product_id}"})
