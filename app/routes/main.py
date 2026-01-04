@@ -36,3 +36,9 @@ def get_product(product_id):
 @main_bp.route("/products/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
     return jsonify({"message": f"Update product {product_id}"})
+
+
+# Exclusão/Venda de produto
+@main_bp.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    return jsonify({"message": f"Delete product {product_id}"})
