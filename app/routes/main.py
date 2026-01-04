@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from app.models.user import LoginPayload
+from pydantic import ValidationError
 
 main_bp = Blueprint("main", __name__)
 
@@ -18,7 +19,18 @@ def products():
 # Login de usuario
 @main_bp.route("/login", methods=["POST"])
 def login():
-    return jsonify({"message": "LOGIN"})
+    try:
+        raw_data = request.json()
+        user_data = LoginPayload(**raw_data)
+    except ValidationError as e:
+        return jsonify({"message": e.errors()})
+    except Exception as e:
+        return jsonify({"message": "Error"}), 500
+    if user_data.username == "admin" and user_data.password == "1234":
+        return jsonify({"message": "Login successful"})
+    else:
+        return jsonify({"message": "Invalid credentials"})
+    return jsonify({"message": "Login do usuario {user_data.model_dump_json}"})
 
 
 # Criação de produto
