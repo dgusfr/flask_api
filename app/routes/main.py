@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from app.models.user import LoginPayload
 
 main_bp = Blueprint("main", __name__)
 
