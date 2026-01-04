@@ -42,3 +42,9 @@ def update_product(product_id):
 @main_bp.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_product(product_id):
     return jsonify({"message": f"Delete product {product_id}"})
+
+
+# Importar de vendas
+@main_bp.route("/sales/upload", methods=["POST"])
+def upload_sales():
+    return jsonify({"message": "Upload sales data"})
