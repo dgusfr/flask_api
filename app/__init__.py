@@ -1,11 +1,9 @@
 from flask import Flask
-from .routes.main import main_bp
 from pymongo import MongoClient
 
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(main_bp)
     app.config.from_object("config.Config")
     global db
 
@@ -14,5 +12,9 @@ def create_app():
         db = client.get_default_database()
     except Exception as e:
         print("Erro na conexão de Banco de Dados.")
+
+    from .routes.main import main_bp
+
+    app.register_blueprint(main_bp)
 
     return app
