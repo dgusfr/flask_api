@@ -3,7 +3,7 @@ from app.models.user import LoginPayload
 from pydantic import ValidationError
 from app import db
 from bson.objectid import ObjectId
-from app.models.products import Products, ProductDBModel
+from app.models.products import Product, ProductDBModel
 
 main_bp = Blueprint("main", __name__)
 

@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
-from bson.objectid import ObjectId
+from typing import Optional, Literal
+from bson import ObjectId
 
 
-class Products(BaseModel):
+class Product(BaseModel):
     id: Optional[ObjectId] = Field(None, alias="_id")
     name: str
     price: float
@@ -28,7 +28,11 @@ class ProductDBModel(Product):
         exclude_unset=False,
         exclude_defaults=False,
         exclude_none=False,
-        round_trip=False
+        round_trip=False,
+        exclude_computed_fields=False,
+        warnings: bool | Literal["none", "warn", "error"] = True,
+        fallback=None,
+        serialize_as_any=False,
     ):
         data = super().model_dump(
             mode=mode,
@@ -40,7 +44,24 @@ class ProductDBModel(Product):
             exclude_defaults=exclude_defaults,
             exclude_none=exclude_none,
             round_trip=round_trip,
+            exclude_computed_fields=exclude_computed_fields,
+            warnings=warnings,
+            fallback=fallback,
+            serialize_as_any=serialize_as_any,
         )
         if self.id:
             data["_id"] = str(data["_id"])
         return data
+
+
+def fix_product(product):
+    product["id"] = str(product.pop("_id")) if "_id" in product else None
+    return product
+
+
+# Example: define products_cursor as an empty list or fetch from your database
+products_cursor = []
+
+products_list = [
+    ProductDBModel(**fix_product(product)).model_dump() for product in products_cursor
+]
