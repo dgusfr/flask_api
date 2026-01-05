@@ -3,6 +3,7 @@ from app.models.user import LoginPayload
 from pydantic import ValidationError
 from app import db
 from bson.objectid import ObjectId
+from app.models.products import Products, ProductDBModel
 
 main_bp = Blueprint("main", __name__)
 
@@ -16,10 +17,9 @@ def home():
 @main_bp.route("/products", methods=["GET"])
 def products():
     products_cursor = db.products.find({})
-    products_list = []
-    for product in products_cursor:
-        product["_id"] = str(product["_id"])
-        products_list.append(product)
+    products_list = [
+        ProductDBModel(**product).model_dump() for product in products_cursor
+    ]
     return jsonify(products_list)
 
 
