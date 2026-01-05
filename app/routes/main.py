@@ -15,7 +15,12 @@ def home():
 # Listagem de produtos
 @main_bp.route("/products", methods=["GET"])
 def products():
-    return jsonify({"message": "List of Products"})
+    products_cursor = db.products.find({})
+    products_list = []
+    for product in products_cursor:
+        product["_id"] = str(product["_id"])
+        products_list.append(product)
+    return jsonify(products_list)
 
 
 # Login de usuario
