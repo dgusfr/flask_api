@@ -18,7 +18,8 @@ def home():
 def products():
     products_cursor = db.products.find({})
     products_list = [
-        ProductDBModel(**product).model_dump() for product in products_cursor
+        ProductDBModel(**product).model_dump(by_alias=True, exclude_none=True)
+        for product in products_cursor
     ]
     return jsonify(products_list)
 
