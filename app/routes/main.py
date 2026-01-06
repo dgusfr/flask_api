@@ -1,9 +1,12 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 from app.models.user import LoginPayload
 from pydantic import ValidationError
 from app import db
 from bson.objectid import ObjectId
 from app.models.products import Product, ProductDBModel
+from app.decorators import token_required
+from datetime import datetime, timedelta, timezone
+import jwt
 
 main_bp = Blueprint("main", __name__)
 
@@ -35,6 +38,14 @@ def login():
     except Exception as e:
         return jsonify({"message": "Error"}), 500
     if user_data.username == "admin" and user_data.password == "1234":
+        jwt.encode(
+            {
+                "user_id": user_data.username,
+                "exp": datetime.now(tz=timezone.utc) + timedelta(hours=1),
+            },
+            current_app.config["SECRET_KEY"],
+            algorithm="HS256",
+        )
         return jsonify({"message": "Login successful"})
     else:
         return jsonify({"message": "Invalid credentials"})
