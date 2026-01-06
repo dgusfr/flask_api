@@ -16,17 +16,6 @@ def home():
     return jsonify({"message": "Welcome to the Flask API!"})
 
 
-# Listagem de produtos
-@main_bp.route("/products", methods=["GET"])
-def products():
-    products_cursor = db.products.find({})
-    products_list = [
-        ProductDBModel(**product).model_dump(by_alias=True, exclude_none=True)
-        for product in products_cursor
-    ]
-    return jsonify(products_list)
-
-
 # Login de usuario
 @main_bp.route("/login", methods=["POST"])
 def login():
@@ -53,6 +42,19 @@ def login():
         return jsonify({"message": "Invalid credentials"}), 401
 
 
+# __________________________________________________________________________________
+# Métodos de Produtos
+# Listagem de produtos
+@main_bp.route("/products", methods=["GET"])
+def products():
+    products_cursor = db.products.find({})
+    products_list = [
+        ProductDBModel(**product).model_dump(by_alias=True, exclude_none=True)
+        for product in products_cursor
+    ]
+    return jsonify(products_list)
+
+
 # Criação de produto
 @main_bp.route("/products", methods=["POST"])
 @token_required
@@ -75,7 +77,7 @@ def create_products(token):
     )
 
 
-# Visualização de produto
+# Visualização de produto especifico
 @main_bp.route("/products/<string:product_id>", methods=["GET"])
 def get_product(product_id):
     try:
@@ -133,6 +135,9 @@ def delete_product(token, product_id):
         return jsonify({"message": "Product deleted successfully"}), 200
     else:
         return jsonify({"message": "Product not found"}), 404
+
+
+# __________________________________________________________________________________
 
 
 # Importar de vendas
