@@ -52,10 +52,13 @@ def create_products():
 def get_product(product_id):
     try:
         product = db.products.find_one({"_id": ObjectId(product_id)})
-        if not product:
+        if product:
+            product_model = ProductDBModel(**product).model_dump(
+                by_alias=True, exclude_none=True
+            )
+            return jsonify(product)
+        else:
             return jsonify({"message": "Product not found"}), 404
-        product["_id"] = str(product["_id"])
-        return jsonify(product)
     except Exception as e:
         return jsonify({"message": "Error retrieving product{product_id}: {e}"})
     return jsonify({"message": f"Details of product {product_id}"})
