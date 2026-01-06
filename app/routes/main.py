@@ -47,21 +47,20 @@ def create_products():
     return jsonify({"message": "Add a new product"})
 
 
-# Visualisação de produto
+# Visualização de produto
 @main_bp.route("/products/<string:product_id>", methods=["GET"])
 def get_product(product_id):
     try:
         product = db.products.find_one({"_id": ObjectId(product_id)})
-        if product:
-            product_model = ProductDBModel(**product).model_dump(
-                by_alias=True, exclude_none=True
-            )
-            return jsonify(product)
-        else:
+
+        if not product:
             return jsonify({"message": "Product not found"}), 404
+
+        product["_id"] = str(product["_id"])
+        return jsonify(product)
+
     except Exception as e:
-        return jsonify({"message": "Error retrieving product{product_id}: {e}"})
-    return jsonify({"message": f"Details of product {product_id}"})
+        return jsonify({"message": f"Error retrieving product {product_id}: {e}"}), 500
 
 
 # Atualização de produto
