@@ -31,31 +31,33 @@ def products():
 @main_bp.route("/login", methods=["POST"])
 def login():
     try:
-        raw_data = request.json()
+        raw_data = request.get_json()
         user_data = LoginPayload(**raw_data)
     except ValidationError as e:
-        return jsonify({"message": e.errors()})
+        return jsonify({"message": e.errors()}), 400
     except Exception as e:
-        return jsonify({"message": "Error"}), 500
-    if user_data.username == "admin" and user_data.password == "1234":
-        jwt.encode(
-            {
-                "user_id": user_data.username,
-                "exp": datetime.now(tz=timezone.utc) + timedelta(hours=1),
-            },
-            current_app.config["SECRET_KEY"],
-            algorithm="HS256",
+        return jsonify({"message": "Error processing data"}), 500
+
+    if user_data.username == "admin" and user_data.password == "supersecret":
+        payload = {
+            "user_id": user_data.username,
+            "exp": datetime.now(tz=timezone.utc) + timedelta(hours=1),
+        }
+
+        token_gerado = jwt.encode(
+            payload, current_app.config["SECRET_KEY"], algorithm="HS256"
         )
-        return jsonify({"message": "Login successful"})
+
+        return jsonify({"access_token": token_gerado}), 200
     else:
-        return jsonify({"message": "Invalid credentials"})
-    return jsonify({"message": "Login do usuario {user_data.model_dump_json}"})
+        return jsonify({"message": "Invalid credentials"}), 401
 
 
 # Criação de produto
 @main_bp.route("/products", methods=["POST"])
-def create_products():
-    return jsonify({"message": "Add a new product"})
+@token_required
+def create_products(token):
+    return jsonify({"message": f"Add a new product by user {token.get('user_id')}"})
 
 
 # Visualização de produto
