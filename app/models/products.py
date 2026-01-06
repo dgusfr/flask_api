@@ -65,3 +65,10 @@ products_cursor = []
 products_list = [
     ProductDBModel(**fix_product(product)).model_dump() for product in products_cursor
 ]
+
+
+class UpdateProdcut(BaseModel):
+    name: Optional[str] = None
+    price: Optional[float] = None
+    description: Optional[str] = None
+    stock: Optional[int] = None

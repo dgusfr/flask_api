@@ -57,7 +57,22 @@ def login():
 @main_bp.route("/products", methods=["POST"])
 @token_required
 def create_products(token):
-    return jsonify({"message": f"Add a new product by user {token.get('user_id')}"})
+    try:
+        product = Product(**request.get_json())
+    except Exception as e:
+        return jsonify({"message": "Error processing data"}), 500
+
+    result = db.products.insert_one(
+        product.model_dump(by_alias=True, exclude_none=True)
+    )
+    return (
+        jsonify(
+            {
+                "message": f"Add a new product by user {token.get('user_id')} with id {result.inserted_id}"
+            }
+        ),
+        201,
+    )
 
 
 # Visualização de produto
@@ -78,7 +93,16 @@ def get_product(product_id):
 
 # Atualização de produto
 @main_bp.route("/products/<int:product_id>", methods=["PUT"])
-def update_product(product_id):
+@token_required
+def update_product(token, product_id):
+    try:
+        update_data = request.get_json()
+        db.products.update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": update_data},
+        )
+    except Exception as e:
+        return jsonify({"message": f"Error updating product {product_id}: {e}"}), 500
     return jsonify({"message": f"Update product {product_id}"})
 
 
