@@ -92,18 +92,30 @@ def get_product(product_id):
 
 
 # Atualização de produto
-@main_bp.route("/products/<int:product_id>", methods=["PUT"])
+@main_bp.route("/products/<string:product_id>", methods=["PUT"])
 @token_required
 def update_product(token, product_id):
     try:
-        update_data = request.get_json()
-        db.products.update_one(
-            {"_id": ObjectId(product_id)},
-            {"$set": update_data},
-        )
-    except Exception as e:
-        return jsonify({"message": f"Error updating product {product_id}: {e}"}), 500
-    return jsonify({"message": f"Update product {product_id}"})
+        oid = ObjectId(product_id)
+    except Exception:
+        return jsonify({"message": "Invalid ID format"}), 400
+
+    update_payload = request.get_json()
+    if not update_payload:
+        return jsonify({"message": "No input data provided"}), 400
+
+    result = db.products.update_one({"_id": oid}, {"$set": update_payload})
+
+    if result.matched_count == 0:
+        return jsonify({"message": "Product not found"}), 404
+
+    updated_product = db.products.find_one({"_id": oid})
+
+    if updated_product:
+        response_model = ProductDBModel(**updated_product)
+        return jsonify(response_model.model_dump(by_alias=True)), 200
+    else:
+        return jsonify({"message": "Product not found"}), 404
 
 
 # Exclusão/Venda de produto
