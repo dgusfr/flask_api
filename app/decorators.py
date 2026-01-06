@@ -3,21 +3,28 @@ from flask import request, jsonify, current_app
 import jwt
 
 
-def token_required(f):
-    @wraps
-    def decorated(*args, **kwargs):
+def token_required(funcao_protegida):
+    @wraps(funcao_protegida)
+    def decorador(*args, **kwargs):
         token = None
-        if "Authorization" in request.headers:
-            try:
-                token = request.headers["Authorization"].split(" ")[1]
-            except IndexError:
-                return jsonify({"message": "Token format is invalid!"}), 401
+        header_autorizacao = request.headers.get("Authorization")
+
+        if header_autorizacao:
+            partes = header_autorizacao.split(" ")
+            if len(partes) == 2:
+                token = partes[1]
+
         if not token:
-            return jsonify({"message": "Token is missing!"}), 401
+            return jsonify({"message": "Token ausente ou mal formatado!"}), 401
 
         try:
-            jwt.decode(token, current_app.config["SECRET_KEY"])
+            chave_secreta = current_app.config["SECRET_KEY"]
+            dados_usuario = jwt.decode(token, chave_secreta, algorithms=["HS256"])
         except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Token has expired!"}), 401
+            return jsonify({"message": "O Token expirou!"}), 401
         except jwt.InvalidTokenError:
-            return jsonify({"message": "Token is invalid!"}), 401
+            return jsonify({"message": "Token inválido!"}), 401
+
+        return funcao_protegida(dados_usuario, *args, **kwargs)
+
+    return decorador
