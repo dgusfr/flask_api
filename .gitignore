@@ -1,39 +1,64 @@
-node_modules
-dist
-.env
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pids
-*.pid
-*.seed
-*.pid.lock
-lib-cov
-coverage
-*.lcov
-bower_components
-typings/
-.npm
-.eslintcache
-.vscode/
+# --- Python ---
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-env/
-venv/
-.venv/
-target/
-*.jar
-*.war
-*.ear
-*.class
-.gradle/
-.settings/
-.project
-.classpath
-.idea/
-*.iml
-out/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
+# --- Flask ---
+instance/
+.webassets-cache
+
+# --- Ambientes Virtuais (Virtual Envs) ---
+venv/
+env/
+.env
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Variáveis de Ambiente e Segredos (CRÍTICO) ---
+.env
+.env.local
+.env.*.local
+
+# --- IDEs e Editores ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Logs e Databases Locais ---
+*.log
+*.sqlite
+*.db
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Testes e Coverage ---
+.coverage
+htmlcov/
+.pytest_cache/
