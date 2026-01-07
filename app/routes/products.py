@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify, request
 from app import db
 from app.models.products import Product, ProductDBModel
+from app.models.sales import Sales
 from app.decorators import token_required
 from bson.objectid import ObjectId
 from pydantic import ValidationError
+import csv
+import io
 
 products_bp = Blueprint("products", __name__)
 
@@ -98,7 +101,59 @@ def delete_product(token, product_id):
         return jsonify({"message": "Product not found"}), 404
 
 
+# --- Rota de Upload de Vendas (CSV) ---
+
+
 @products_bp.route("/sales/upload", methods=["POST"])
 @token_required
 def upload_sales(token):
-    return jsonify({"message": "Upload sales data"}), 200
+    if "file" not in request.files:
+        return jsonify({"error": "Nenhum arquivo enviado"}), 400
+
+    file = request.files["file"]
+
+    if not file.filename:
+        return jsonify({"error": "Nenhum arquivo selecionado"}), 400
+
+    if not file.filename.endswith(".csv"):
+        return jsonify({"error": "O arquivo deve ser um CSV"}), 400
+
+    try:
+        stream = io.StringIO(file.stream.read().decode("UTF-8"), newline=None)
+        csv_reader = csv.DictReader(stream)
+
+        sales_to_insert = []
+        errors = []
+
+        for row_num, row in enumerate(csv_reader, start=1):
+            try:
+                sale_data = Sales.model_validate(row)
+                sales_to_insert.append(sale_data.model_dump())
+            except ValidationError as e:
+                errors.append(f"Linha {row_num}: Dados inválidos - {e.errors()}")
+            except Exception as e:
+                errors.append(f"Linha {row_num}: Erro inesperado - {str(e)}")
+
+        if sales_to_insert:
+            try:
+                db.sales.insert_many(sales_to_insert)
+            except Exception as e:
+                return (
+                    jsonify({"error": f"Erro crítico ao salvar no banco: {str(e)}"}),
+                    500,
+                )
+
+        return (
+            jsonify(
+                {
+                    "message": "Processamento concluído",
+                    "vendas_importadas": len(sales_to_insert),
+                    "total_erros": len(errors),
+                    "detalhes_erros": errors,
+                }
+            ),
+            201,
+        )
+
+    except Exception as e:
+        return jsonify({"error": f"Erro ao processar o arquivo: {str(e)}"}), 500

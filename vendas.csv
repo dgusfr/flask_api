@@ -1,0 +1,4 @@
+sale_date,product_id,quantity,total_value
+2023-10-01,65123abcde,2,150.50
+2023-10-02,65123abcdf,1,99.90
+2023-10-03,65123abcdg,5,400.00
