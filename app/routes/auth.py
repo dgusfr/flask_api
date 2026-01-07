@@ -9,7 +9,7 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/", methods=["GET"])
 def home():
-    return jsonify({"message": "Bem-vindo à API Flask Modularizada!"})
+    return jsonify({"message": "Bem-vindo à API Flask!"})
 
 
 @auth_bp.route("/login", methods=["POST"])
