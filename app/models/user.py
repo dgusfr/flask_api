@@ -15,6 +15,14 @@ class User(BaseModel):
     )
 
 
+class UserDBModel(User):
+    def model_dump(self, **kwargs):
+        data = super().model_dump(**kwargs)
+        if self.id:
+            data["_id"] = str(data["_id"])
+        return data
+
+
 class LoginPayload(BaseModel):
     username: str
     password: str
