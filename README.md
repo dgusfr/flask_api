@@ -1,4 +1,4 @@
-# SalesNexus API - Gerenciamento de Vendas e Produtos
+# API - Gerenciamento de Vendas e Produtos
 
 Esta aplicação foi construída para simular um back-end real de e-commerce, resolvendo problemas comuns como autenticação segura, validação rigorosa de dados e processamento em lote de grandes volumes de informações via CSV.
 
