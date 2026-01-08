@@ -260,6 +260,7 @@ sale_date,product_id,quantity,total_value
 ```
 
 ---
+___
 
 ### 👤 Usuários
 
@@ -313,6 +314,7 @@ curl -X GET http://localhost:5000/users \
 ```
 
 ---
+___
 
 ## 📂 Estrutura do Projeto
 
@@ -339,11 +341,11 @@ curl -X GET http://localhost:5000/users \
 
 ---
 
-## 🔮 Melhorias Futuras
+## Melhorias Futuras
 
-* [ ] Implementação de Testes Unitários (pytest).
-* [ ] Containerização (Docker e Docker Compose).
-* [ ] Documentação automática (Swagger/OpenAPI).
+* Implementação de Testes Unitários (pytest).
+* Containerização (Docker e Docker Compose).
+* Documentação automática (Swagger/OpenAPI).
 
 ---
 
