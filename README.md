@@ -1,5 +1,10 @@
 # API - Gerenciamento de Vendas e Produtos
 
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+
 Esta aplicação foi construída para simular um back-end real de e-commerce, resolvendo problemas comuns como autenticação segura, validação rigorosa de dados e processamento em lote de grandes volumes de informações via CSV.
 
 ---
@@ -28,17 +33,6 @@ O projeto segue estritamente o padrão **MVC (Model-View-Controller)** adaptado 
 * **Validação com Pydantic:** Schemas fortes que impedem a entrada de dados inválidos ("Dirty Data") no MongoDB.
 * **Autenticação Stateless:** Uso de JWT (JSON Web Tokens) para segurança escalável.
 * **Bulk Operations:** O endpoint `/sales/upload` utiliza streaming de dados para processar arquivos CSV grandes sem estourar a memória RAM, realizando inserções em lote (`insert_many`).
-
----
-
-## Tech Stack
-
-* **Linguagem:** Python 3.10+
-* **Framework:** Flask
-* **Banco de Dados:** MongoDB (PyMongo)
-* **Autenticação:** PyJWT
-* **Validação:** Pydantic V2
-* **Ambiente:** Python-dotenv
 
 ---
 ---
