@@ -1,7 +1,5 @@
 # SalesNexus API - Gerenciamento de Vendas e Produtos
 
-> **API RESTful escalável desenvolvida com arquitetura MVC, focada em performance e integridade de dados.**
-
 Esta aplicação foi construída para simular um back-end real de e-commerce, resolvendo problemas comuns como autenticação segura, validação rigorosa de dados e processamento em lote de grandes volumes de informações via CSV.
 
 ---
@@ -10,7 +8,6 @@ Esta aplicação foi construída para simular um back-end real de e-commerce, re
 
 * [Arquitetura e Design Patterns](#arquitetura-e-design-patterns)
 * [Tech Stack](#tech-stack)
-* [Instalação e Execução](#instalação-e-execução)
 * [Documentação da API](#documentação-da-api)
     * [Autenticação](#autenticação)
     * [Produtos](#produtos)
@@ -20,8 +17,9 @@ Esta aplicação foi construída para simular um back-end real de e-commerce, re
 * [Melhorias Futuras](#melhorias-futuras)
 
 ---
+___
 
-## Arquitetura e Design Patterns
+## Arquitetura
 
 O projeto segue estritamente o padrão **MVC (Model-View-Controller)** adaptado para APIs REST.
 
@@ -43,36 +41,6 @@ O projeto segue estritamente o padrão **MVC (Model-View-Controller)** adaptado 
 * **Ambiente:** Python-dotenv
 
 ---
-
-## Instalação e Execução
-
-### 1. Clone e entre no projeto
-```bash
-git clone [https://github.com/dgusfr/flask_api.git](https://github.com/dgusfr/flask_api.git)
-cd flask_api
-
-```
-
-### 2. Configure as Variáveis (.env)
-
-```ini
-MONGO_URI=mongodb://localhost:27017/sales_db
-SECRET_KEY=sua_chave_secreta_dev
-
-```
-
-### 3. Instale e Rode
-
-```bash
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-python run.py
-
-```
-
-A API estará disponível em: `http://localhost:5000`
-
 ---
 
 ## Documentação da API
