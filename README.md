@@ -1,95 +1,88 @@
-SalesNexus API - Gerenciamento de Vendas e Produtos
+# SalesNexus API - Gerenciamento de Vendas e Produtos
 
-API RESTful escalável desenvolvida com arquitetura MVC, focada em performance e integridade de dados.
+> **API RESTful escalável desenvolvida com arquitetura MVC, focada em performance e integridade de dados.**
 
 Esta aplicação foi construída para simular um back-end real de e-commerce, resolvendo problemas comuns como autenticação segura, validação rigorosa de dados e processamento em lote de grandes volumes de informações via CSV.
 
-📑 Tabela de Conteúdos
+---
 
-Arquitetura e Design Patterns
+## Tabela de Conteúdos
 
-Tech Stack
+* [Arquitetura e Design Patterns](#arquitetura-e-design-patterns)
+* [Tech Stack](#tech-stack)
+* [Instalação e Execução](#instalação-e-execução)
+* [Documentação da API](#documentação-da-api)
+    * [Autenticação](#autenticação)
+    * [Produtos](#produtos)
+    * [Vendas (Upload CSV)](#vendas-e-uploads)
+    * [Usuários](#usuários)
+* [Estrutura do Projeto](#estrutura-do-projeto)
+* [Melhorias Futuras](#melhorias-futuras)
 
-Instalação e Execução
+---
 
-Documentação da API
+## Arquitetura e Design Patterns
 
-Autenticação
+O projeto segue estritamente o padrão **MVC (Model-View-Controller)** adaptado para APIs REST.
 
-Produtos
+### Destaques Técnicos:
+* **Modularização com Blueprints:** Separação lógica de rotas (auth, products, users) para facilitar a escalabilidade horizontal do código.
+* **Validação com Pydantic:** Schemas fortes que impedem a entrada de dados inválidos ("Dirty Data") no MongoDB.
+* **Autenticação Stateless:** Uso de JWT (JSON Web Tokens) para segurança escalável.
+* **Bulk Operations:** O endpoint `/sales/upload` utiliza streaming de dados para processar arquivos CSV grandes sem estourar a memória RAM, realizando inserções em lote (`insert_many`).
 
-Vendas (Upload CSV)
+---
 
-Usuários
+## Tech Stack
 
-Estrutura do Projeto
+* **Linguagem:** Python 3.10+
+* **Framework:** Flask
+* **Banco de Dados:** MongoDB (PyMongo)
+* **Autenticação:** PyJWT
+* **Validação:** Pydantic V2
+* **Ambiente:** Python-dotenv
 
-🏗️ Arquitetura e Design Patterns
+---
 
-O projeto segue estritamente o padrão MVC (Model-View-Controller) adaptado para APIs REST.
+## Instalação e Execução
 
-Destaques Técnicos:
-
-Modularização com Blueprints: Separação lógica de rotas (auth, products, users) para facilitar a escalabilidade horizontal do código.
-
-Validação com Pydantic: Schemas fortes que impedem a entrada de dados inválidos ("Dirty Data") no MongoDB.
-
-Autenticação Stateless: Uso de JWT (JSON Web Tokens) para segurança escalável.
-
-Bulk Operations: O endpoint /sales/upload utiliza streaming de dados para processar arquivos CSV grandes sem estourar a memória RAM, realizando inserções em lote (insert_many).
-
-🛠️ Tech Stack
-
-Linguagem: Python 3.10+
-
-Framework: Flask
-
-Banco de Dados: MongoDB (PyMongo)
-
-Autenticação: PyJWT
-
-Validação: Pydantic V2
-
-Ambiente: Python-dotenv
-
-🚀 Instalação e Execução
-
-1. Clone e entre no projeto
-
+### 1. Clone e entre no projeto
+```bash
 git clone [https://github.com/dgusfr/flask_api.git](https://github.com/dgusfr/flask_api.git)
 cd flask_api
 
+```
 
-2. Configure as Variáveis (.env)
+### 2. Configure as Variáveis (.env)
 
-Crie um arquivo .env na raiz:
-
+```ini
 MONGO_URI=mongodb://localhost:27017/sales_db
 SECRET_KEY=sua_chave_secreta_dev
 
+```
 
-3. Instale e Rode
+### 3. Instale e Rode
 
-# Cria e ativa ambiente virtual (Windows)
+```bash
 python -m venv venv
 .\venv\Scripts\activate
-
 pip install -r requirements.txt
 python run.py
 
+```
 
-A API estará disponível em: http://localhost:5000
+A API estará disponível em: `http://localhost:5000`
 
-📚 Documentação da API
+---
 
-🔐 Autenticação
+## Documentação da API
+
+### Autenticação
 
 Geração de token de acesso para rotas protegidas.
+**Endpoint:** `POST /login`
 
-Endpoint: POST /login
-
-Exemplo de Requisição (cURL):
-
+```bash
 curl -X POST http://localhost:5000/login \
 -H "Content-Type: application/json" \
 -d '{
@@ -97,18 +90,22 @@ curl -X POST http://localhost:5000/login \
     "password": "123"
 }'
 
+```
 
-Respostas:
+**Respostas:**
 
-✅ 200 OK (Sucesso)
+* ✅ **200 OK**:
 
+```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
 }
 
+```
 
-❌ 400 Bad Request (Erro de Validação)
+* ❌ **400 Bad Request**:
 
+```json
 {
   "message": [
     {
@@ -119,30 +116,34 @@ Respostas:
   ]
 }
 
+```
 
-❌ 401 Unauthorized (Credenciais Inválidas)
+* ❌ **401 Unauthorized**:
 
+```json
 {
   "message": "Credenciais inválidas"
 }
 
+```
 
-📦 Produtos
+---
+___
+
+### Produtos
 
 Gerenciamento do catálogo. Requer token Bearer para operações de escrita.
 
-Endpoints Principais:
+**Endpoints Principais:**
 
-GET /products (Público)
+* `GET /products` (Público)
+* `POST /products` (Protegido)
+* `PUT /products/<id>` (Protegido)
+* `DELETE /products/<id>` (Protegido)
 
-POST /products (Protegido)
+**Exemplo: Criar Produto (cURL):**
 
-PUT /products/<id> (Protegido)
-
-DELETE /products/<id> (Protegido)
-
-Exemplo: Criar Produto (cURL):
-
+```bash
 curl -X POST http://localhost:5000/products \
 -H "Authorization: Bearer SEU_TOKEN_AQUI" \
 -H "Content-Type: application/json" \
@@ -153,18 +154,22 @@ curl -X POST http://localhost:5000/products \
     "description": "i7, 16GB RAM, RTX 3060"
 }'
 
+```
 
-Respostas:
+**Respostas:**
 
-✅ 201 Created (Produto Criado)
+* ✅ **201 Created**:
 
+```json
 {
   "message": "Add a new product by user admin with id 659f8a..."
 }
 
+```
 
-❌ 400 Bad Request (Erro de Validação Pydantic)
+* ❌ **400 Bad Request**:
 
+```json
 {
   "message": [
     {
@@ -175,37 +180,56 @@ Respostas:
   ]
 }
 
+```
 
-❌ 401 Unauthorized (Token Inválido/Ausente)
+* ❌ **401 Unauthorized**:
 
+```json
 {
   "message": "Token is missing!"
 }
 
+```
 
-📈 Vendas e Uploads
+* ❌ **404 Not Found**:
+
+```json
+{
+  "message": "Product not found"
+}
+
+```
+
+---
+___
+
+### Vendas e Uploads
 
 Processamento em lote de vendas via arquivo.
+**Endpoint:** `POST /sales/upload`
 
-Endpoint: POST /sales/upload
+**Exemplo de Requisição (cURL):**
 
-Exemplo de Requisição (cURL):
-
+```bash
 curl -X POST http://localhost:5000/sales/upload \
 -H "Authorization: Bearer SEU_TOKEN_AQUI" \
 -F "file=@/caminho/para/vendas.csv"
 
+```
 
-Formato CSV Esperado:
+**Formato CSV Esperado:**
 
+```csv
 sale_date,product_id,quantity,total_value
 2023-10-01,65123abcde,2,150.50
 
+```
 
-Respostas:
+**Respostas:**
 
-✅ 201 Created (Processamento com Sucesso)
+* ✅ **201 Created**:
 
+```json
 {
   "message": "Processamento concluído",
   "vendas_importadas": 150,
@@ -215,43 +239,51 @@ Respostas:
   ]
 }
 
+```
 
-❌ 400 Bad Request (Arquivo Inválido)
+* ❌ **400 Bad Request**:
 
+```json
 {
   "error": "O arquivo deve ser um CSV"
 }
 
+```
 
-❌ 500 Internal Server Error (Falha Crítica)
+* ❌ **500 Internal Server Error**:
 
+```json
 {
   "error": "Erro crítico ao salvar no banco: connection timed out"
 }
 
+```
 
-👤 Usuários
+---
+
+### 👤 Usuários
 
 Gestão de usuários do sistema.
 
-Endpoints Principais:
+**Endpoints Principais:**
 
-GET /users (Protegido)
+* `GET /users` (Protegido)
+* `POST /users` (Público - Registro)
+* `DELETE /users/<id>` (Protegido)
 
-POST /users (Público - Registro)
+**Exemplo: Listar Usuários (cURL):**
 
-DELETE /users/<id> (Protegido)
-
-Exemplo: Listar Usuários (cURL):
-
+```bash
 curl -X GET http://localhost:5000/users \
 -H "Authorization: Bearer SEU_TOKEN_AQUI"
 
+```
 
-Respostas:
+**Respostas:**
 
-✅ 200 OK (Listagem)
+* ✅ **200 OK**:
 
+```json
 [
   {
     "_id": "659f8a...",
@@ -260,41 +292,60 @@ Respostas:
   }
 ]
 
+```
 
-❌ 409 Conflict (Usuário Duplicado)
+* ✅ **201 Created**:
 
+```json
+{
+  "message": "User created with ID: 659f8a..."
+}
+
+```
+
+* ❌ **409 Conflict**:
+
+```json
 {
   "message": "Username already exists"
 }
 
+```
 
-📂 Estrutura do Projeto
+---
 
+## 📂 Estrutura do Projeto
+
+```text
 /
 ├── app/
-│   ├── config.py       # Configurações do Flask e Variáveis de Ambiente
-│   ├── decorators.py   # Middlewares (ex: @token_required)
-│   ├── __init__.py     # Application Factory e Registro de Blueprints
-│   ├── models/         # Camada de Dados (Pydantic Models)
-│   │   ├── products.py # Schemas de Produto
-│   │   ├── sales.py    # Schemas de Venda
-│   │   └── user.py     # Schemas de Usuário e Login
-│   └── routes/         # Camada de Controle (Rotas/Endpoints)
-│       ├── auth.py     # Autenticação e Login
-│       ├── products.py # CRUD de Produtos e Upload de CSV
-│       └── users.py    # CRUD de Usuários
-├── .env                # Arquivo de variáveis sensíveis (ignorado pelo git)
-├── .gitignore          # Regras de ignorar arquivos
-├── requirements.txt    # Lista de dependências do projeto
-└── run.py              # Ponto de entrada para execução do servidor
+│   ├── config.py
+│   ├── decorators.py
+│   ├── __init__.py
+│   ├── models/
+│   │   ├── products.py
+│   │   ├── sales.py
+│   │   └── user.py
+│   └── routes/
+│       ├── auth.py
+│       ├── products.py
+│       └── users.py
+├── .env
+├── .gitignore
+├── requirements.txt
+└── run.py
 
+```
 
-🔮 Melhorias Futuras
+---
 
-[ ] Implementação de Testes Unitários (pytest).
+## 🔮 Melhorias Futuras
 
-[ ] Containerização (Docker e Docker Compose).
+* [ ] Implementação de Testes Unitários (pytest).
+* [ ] Containerização (Docker e Docker Compose).
+* [ ] Documentação automática (Swagger/OpenAPI).
 
-[ ] Documentação automática (Swagger/OpenAPI).
+---
 
-Desenvolvido por Diego Franco
+Desenvolvido por **Diego Franco**
+
