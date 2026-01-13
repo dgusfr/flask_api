@@ -1,0 +1,15 @@
+summary: Rota Home
+description: Verifica se a API está online.
+tags:
+  - Health Check
+responses:
+  200:
+    description: API Online
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Bem-vindo à API Flask!"
