@@ -1,0 +1,18 @@
+summary: Deletar Usuário
+description: Remove um usuário pelo ID.
+tags:
+  - Usuários
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: user_id
+    schema:
+      type: string
+    required: true
+    description: ID do usuário (MongoDB ObjectId)
+responses:
+  200:
+    description: Usuário deletado.
+  404:
+    description: Usuário não encontrado.
