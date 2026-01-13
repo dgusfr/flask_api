@@ -1,0 +1,11 @@
+summary: Listar Usuários
+description: Retorna todos os usuários cadastrados (sem as senhas).
+tags:
+  - Usuários
+security:
+  - Bearer: []
+responses:
+  200:
+    description: Lista de usuários recuperada.
+  401:
+    description: Token não fornecido ou inválido.
