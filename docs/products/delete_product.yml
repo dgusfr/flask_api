@@ -1,0 +1,15 @@
+summary: Deletar Produto
+description: Remove um produto do catálogo.
+tags:
+  - Produtos
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: product_id
+    schema:
+      type: string
+    required: true
+responses:
+  200:
+    description: Produto removido.

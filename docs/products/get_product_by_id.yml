@@ -1,0 +1,15 @@
+summary: Buscar Produto por ID
+description: Retorna detalhes de um único produto.
+tags:
+  - Produtos
+parameters:
+  - in: path
+    name: product_id
+    schema:
+      type: string
+    required: true
+responses:
+  200:
+    description: Produto encontrado.
+  404:
+    description: Produto não encontrado.

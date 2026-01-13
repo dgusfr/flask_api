@@ -1,0 +1,30 @@
+summary: Criar Produto
+description: Adiciona um novo item ao catálogo.
+tags:
+  - Produtos
+security:
+  - Bearer: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - price
+          - stock
+        properties:
+          name:
+            type: string
+          price:
+            type: number
+          stock:
+            type: integer
+          description:
+            type: string
+responses:
+  201:
+    description: Produto criado.
+  400:
+    description: Erro de validação.

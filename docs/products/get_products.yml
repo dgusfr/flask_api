@@ -1,0 +1,7 @@
+summary: Listar Produtos
+description: Retorna o catálogo completo de produtos.
+tags:
+  - Produtos
+responses:
+  200:
+    description: Lista de produtos.

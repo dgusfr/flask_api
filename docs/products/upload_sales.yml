@@ -1,0 +1,20 @@
+summary: Upload de Vendas (CSV)
+description: Processa um arquivo CSV contendo vendas em lote.
+tags:
+  - Vendas
+security:
+  - Bearer: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          file:
+            type: string
+            format: binary
+responses:
+  201:
+    description: Processamento concluído.
+  400:
+    description: Arquivo inválido ou não enviado.

@@ -1,0 +1,29 @@
+summary: Atualizar Produto
+description: Atualiza dados parciais de um produto.
+tags:
+  - Produtos
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: product_id
+    schema:
+      type: string
+    required: true
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          price:
+            type: number
+          stock:
+            type: integer
+responses:
+  200:
+    description: Produto atualizado.
+  404:
+    description: Produto não encontrado.
