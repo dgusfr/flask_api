@@ -28,7 +28,7 @@ def create_app():
     }
 
     template = {
-        "swagger": "2.0",
+        "openapi": "3.0.0",
         "info": {
             "title": "API E-commerce",
             "description": "API para gerenciamento de produtos, usuários e vendas.",
@@ -40,7 +40,7 @@ def create_app():
                     "type": "http",
                     "scheme": "bearer",
                     "bearerFormat": "JWT",
-                    "description": "Insira seu token JWT no formato: Bearer <seu_token>",
+                    "description": "Insira seu token JWT.",
                 }
             }
         },
