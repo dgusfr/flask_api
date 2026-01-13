@@ -1,0 +1,25 @@
+summary: Criar Usuário
+description: Registra um novo usuário no sistema.
+tags:
+  - Usuários
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - username
+          - password
+        properties:
+          username:
+            type: string
+          password:
+            type: string
+          email:
+            type: string
+responses:
+  201:
+    description: Usuário criado com sucesso.
+  409:
+    description: Nome de usuário já existe.

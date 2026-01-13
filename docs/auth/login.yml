@@ -1,0 +1,29 @@
+summary: Login de Usuário
+description: Autentica o usuário e retorna um JWT para acesso às rotas protegidas.
+tags:
+  - Autenticação
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          username:
+            type: string
+            example: "admin"
+          password:
+            type: string
+            example: "1234"
+responses:
+  200:
+    description: Sucesso. Retorna o token de acesso.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            access_token:
+              type: string
+  401:
+    description: Credenciais inválidas.
