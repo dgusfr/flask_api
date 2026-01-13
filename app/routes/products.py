@@ -7,11 +7,13 @@ from bson.objectid import ObjectId
 from pydantic import ValidationError
 import csv
 import io
+from flasgger import swag_from
 
 products_bp = Blueprint("products", __name__)
 
 
 @products_bp.route("/products", methods=["GET"])
+@swag_from("../../docs/products/get_products.yml")
 def get_products():
     products_cursor = db.products.find({})
     products_list = []
@@ -27,6 +29,7 @@ def get_products():
 
 @products_bp.route("/products", methods=["POST"])
 @token_required
+@swag_from("../../docs/products/create_product.yml")
 def create_products(token):
     try:
         raw_data = request.get_json()
@@ -49,6 +52,7 @@ def create_products(token):
 
 
 @products_bp.route("/products/<string:product_id>", methods=["GET"])
+@swag_from("../../docs/products/get_product_by_id.yml")
 def get_product(product_id):
     try:
         oid = ObjectId(product_id)
@@ -62,6 +66,7 @@ def get_product(product_id):
 
 @products_bp.route("/products/<string:product_id>", methods=["PUT"])
 @token_required
+@swag_from("../../docs/products/update_product.yml")
 def update_product(token, product_id):
     try:
         oid = ObjectId(product_id)
@@ -87,6 +92,7 @@ def update_product(token, product_id):
 
 @products_bp.route("/products/<string:product_id>", methods=["DELETE"])
 @token_required
+@swag_from("../../docs/products/delete_product.yml")
 def delete_product(token, product_id):
     try:
         oid = ObjectId(product_id)
@@ -101,11 +107,9 @@ def delete_product(token, product_id):
         return jsonify({"message": "Product not found"}), 404
 
 
-# --- Rota de Upload de Vendas (CSV) ---
-
-
 @products_bp.route("/sales/upload", methods=["POST"])
 @token_required
+@swag_from("../../docs/products/upload_sales.yml")
 def upload_sales(token):
     if "file" not in request.files:
         return jsonify({"error": "Nenhum arquivo enviado"}), 400
