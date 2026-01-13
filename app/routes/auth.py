@@ -3,16 +3,19 @@ from app.models.user import LoginPayload
 from pydantic import ValidationError
 import jwt
 from datetime import datetime, timedelta, timezone
+from flasgger import swag_from
 
 auth_bp = Blueprint("auth", __name__)
 
 
 @auth_bp.route("/", methods=["GET"])
+@swag_from("../../docs/auth/home.yml")
 def home():
     return jsonify({"message": "Bem-vindo à API Flask!"})
 
 
 @auth_bp.route("/login", methods=["POST"])
+@swag_from("../../docs/auth/login.yml")
 def login():
     try:
         raw_data = request.get_json()
@@ -22,7 +25,6 @@ def login():
     except Exception:
         return jsonify({"message": "Erro ao processar dados"}), 500
 
-    # Lógica de validação (Simulada - idealmente buscaria do banco de usuários)
     if user_data.username == "admin" and user_data.password == "1234":
         payload = {
             "user_id": user_data.username,
